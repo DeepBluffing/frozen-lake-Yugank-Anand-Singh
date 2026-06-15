@@ -27,7 +27,10 @@ def train_agent():
             # If it's less than epsilon, choose a random action (env.action_space.sample()).
             # Otherwise, choose the action with the highest Q-value for the current state (np.argmax).
             # ==========================================
-            action = 0 # Replace this line!
+            if np.random.uniform(0, 1) < epsilon:
+                action = env.action_space.sample()
+            else:
+                action = np.argmax(q_table[state])
             
             
             # Take the action
@@ -38,7 +41,9 @@ def train_agent():
             # TODO 2: The Bellman Equation Update
             # Update q_table[state, action] using alpha, gamma, the reward, and the max Q-value of the next_state.
             # ==========================================
-            pass # Replace this line!
+            max_future_q = np.max(q_table[next_state])
+            td_target = reward + gamma * max_future_q
+            q_table[state, action] += alpha * (td_target - q_table[state, action])
 
             
             state = next_state
